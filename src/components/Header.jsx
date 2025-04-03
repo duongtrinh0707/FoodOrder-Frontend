@@ -6,16 +6,16 @@ import "../styles/Header.css";
 const Header = () => {
   const [cartCount, setCartCount] = useState(0);
   const [user, setUser] = useState(null);
-  const [categories, setCategories] = useState([]); // Lưu danh sách category
-  const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [latestOrder, setLatestOrder] = useState(null); // Đơn hàng mới nhất
+  const [categories, setCategories] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [latestOrder, setLatestOrder] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     updateCartCount();
     updateUser();
-    fetchCategories(); // Lấy danh sách category từ API
-    fetchLatestOrder(); // Lấy đơn hàng mới nhất
+    fetchCategories();
+    fetchLatestOrder();
 
     const handleStorageChange = () => {
       updateCartCount();
@@ -27,17 +27,19 @@ const Header = () => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  // Lấy danh sách category từ backend
-  const fetchCategories = async () => {
+  useEffect(() => {
+    fetchCategories(searchTerm);
+  }, [searchTerm]);
+
+  const fetchCategories = async (searchTerm = "") => {
     try {
-      const res = await axios.get("http://localhost:5000/api/categories");
+      const res = await axios.get(`http://localhost:5000/api/categories?search=${searchTerm}`);
       setCategories(res.data);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách category:", error);
     }
   };
 
-  // Lấy đơn hàng mới nhất của người dùng
   const fetchLatestOrder = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -48,7 +50,7 @@ const Header = () => {
       });
 
       if (data.length > 0) {
-        setLatestOrder(data[0]); // Lấy đơn hàng mới nhất
+        setLatestOrder(data[0]);
       }
     } catch (error) {
       console.error("Lỗi khi lấy đơn hàng:", error);
@@ -80,18 +82,19 @@ const Header = () => {
         </h1>
         <nav>
           <ul className="nav-list">
-            {/* Menu Products với Dropdown */}
-            <li
-              className="dropdown"
-              onMouseEnter={() => setDropdownVisible(true)}
-              onMouseLeave={() => setDropdownVisible(false)}
-            >
-              <Link to="/products" className="link">Products ▾</Link>
-              {dropdownVisible && (
-                <ul className="dropdown-menu">
+            <li>
+              <input
+                type="text"
+                placeholder="Tìm category..."
+                className="search-input"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && categories.length > 0 && (
+                <ul className="search-results">
                   {categories.map((category) => (
                     <li key={category._id}>
-                      <Link to={`/category/${category._id}`} className="dropdown-item">
+                      <Link to={`/category/${category._id}`} className="search-item">
                         {category.name}
                       </Link>
                     </li>

@@ -23,17 +23,20 @@ const ProductListPage = () => {
   const handleAddToCart = async (productId) => {
     const token = localStorage.getItem("token");
     if (!token) {
-      console.error("🔴 Bạn cần đăng nhập!");
+      alert("🔒 Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng!");
       return;
     }
   
     try {
       const result = await addToCart(productId, 1); // 👈 Thêm số lượng mặc định
-      console.log("✅ Thêm vào giỏ hàng thành công:", result);
+      alert("✅ Sản phẩm đã được thêm vào giỏ hàng thành công!");
+      console.log("Thêm vào giỏ hàng:", result);
     } catch (error) {
-      console.error("🔴 Lỗi khi thêm vào giỏ hàng:", error.response?.data?.message || error.message);
+      //console.error("🔴 Lỗi khi thêm vào giỏ hàng:", error.response?.data?.message || error.message);
+      alert("❌ Lỗi khi thêm sản phẩm vào giỏ hàng!");
     }
   };
+  
   
   
   return (

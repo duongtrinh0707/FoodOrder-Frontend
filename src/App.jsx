@@ -11,7 +11,12 @@ import "./App.css"; // Thêm file CSS chung
 import CategoryPage from "./pages/CategoryPage";
 import Checkout from "./pages/Checkout";
 import DetailOrder from "./pages/DetailOrder";
-
+import ProfilePage from "./pages/ProfilePage";
+import AdminLogin from "./admin/AdminLogin";
+import AdminDashboard from "./admin/AdminDashboard";
+import AdminOrders from "./admin/AdminOrders";
+import AdminUserPage from "./admin/AdminUserPage";
+import AdminProductPage from "./admin/AdminProductPage";
 const App = () => {
   return (
     <Router>
@@ -25,10 +30,15 @@ const App = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/cart" element={<CartPage />} />
-            
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/category/:id" element={<CategoryPage />} />
             <Route path="/order/:id" element={<DetailOrder />} />
             <Route path="/checkout" element={<Checkout />} /> {/* Thêm route cho Checkout */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminDashboard />} />    
+            <Route path="/admin/orders" element={<AdminOrders />} />
+            <Route path="/admin/users" element={<AdminUserPage />} />
+            <Route path="/admin/products" element={<AdminProductPage />} />
             
           </Routes>
         </main>

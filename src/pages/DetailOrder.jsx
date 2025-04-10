@@ -29,7 +29,6 @@ const DetailOrder = () => {
         <div className="order-detail-container">
             <h2>Chi tiết đơn hàng</h2>
             <p><strong>Mã đơn hàng:</strong> {order._id}</p>
-            <p><strong>Trạng thái thanh toán:</strong> {order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"}</p>
             <h3>Sản phẩm đã đặt:</h3>
             {order.orderItems.map((item) => (
                 <div key={item._id} className="order-item">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { getCart, removeFromCart } from "../utils/axiosInstance"; // Import API giỏ hàng
+import { getCart, removeFromCart } from "../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import "../styles/CartPage.css"; 
+import "../styles/CartPage.css";
 
 const CartPage = () => {
   const [cart, setCart] = useState([]);
@@ -18,9 +18,9 @@ const CartPage = () => {
           navigate("/login");
           return;
         }
-        
+
         const data = await getCart(token);
-        console.log("Dữ liệu nhận được từ API:", data); // Debug dữ liệu API
+        console.log("Dữ liệu nhận được từ API:", data);
 
         if (data && data.cartItems && Array.isArray(data.cartItems)) {
           setCart(data.cartItems);
@@ -53,10 +53,12 @@ const CartPage = () => {
       alert("Giỏ hàng trống, không thể thanh toán!");
       return;
     }
+
     localStorage.setItem("cart", JSON.stringify(cart)); // Lưu giỏ hàng vào localStorage
-    navigate("/checkout");
+    navigate("/checkout"); // Chuyển hướng tới trang thanh toán
   };
-  
+
+  const totalAmount = cart.reduce((sum, item) => sum + item.product.price, 0);
 
   return (
     <div className="cart-container">
@@ -94,10 +96,16 @@ const CartPage = () => {
           )}
         </ul>
       )}
+
       {cart.length > 0 && (
-        <button className="checkout-button" onClick={handleCheckout}>
-          Tiến hành thanh toán
-        </button>
+        <div className="checkout-section">
+          <p className="total-price">
+            Tổng tiền: {totalAmount.toLocaleString()} VND
+          </p>
+          <button className="checkout-button" onClick={handleCheckout}>
+            Tiến hành thanh toán
+          </button>
+        </div>
       )}
     </div>
   );
